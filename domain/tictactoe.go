@@ -13,7 +13,7 @@ type Tictactoe struct {
 
 type Game interface {
 	CheckForWinner() (bool, string)
-	switchPlayer() string
+	SwitchPlayer() string
 	Play(position int) error
 }
 
@@ -72,7 +72,7 @@ func (u *Tictactoe) CheckForWinner() (bool, string) {
 	return false, ""
 }
 
-func (u *Tictactoe) switchPlayer() string {
+func (u *Tictactoe) SwitchPlayer() string {
 	if u.player == playerO {
 		u.player = playerX
 		return u.player
