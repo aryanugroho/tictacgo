@@ -1,5 +1,7 @@
 package domain
 
+import "errors"
+
 type Tictactoe struct {
 	board       [9]string
 	player      string
@@ -10,8 +12,8 @@ type Tictactoe struct {
 type Game interface {
 	CheckForWinner() (bool, string)
 	ClearScreen()
-	SwitchPlayer()
-	play() error
+	switchPlayer() string
+	play(position int) error
 	Next() int
 	DrawBoard()
 }
@@ -20,6 +22,10 @@ const (
 	playerO    = "O"
 	playerX    = "X"
 	playerDraw = ""
+)
+
+var (
+	ErrInvalidPosition = errors.New("invalid position")
 )
 
 func NewTictactoe() Game {
@@ -71,12 +77,22 @@ func (u *Tictactoe) ClearScreen() {
 
 }
 
-func (u *Tictactoe) SwitchPlayer() {
-
+func (u *Tictactoe) switchPlayer() string {
+	if u.player == playerO {
+		u.player = playerX
+		return u.player
+	}
+	return playerO
 }
 
-func (u *Tictactoe) play() error {
-	return nil
+func (u *Tictactoe) play(position int) error {
+	if u.board[position-1] == "" {
+		u.board[position-1] = u.player
+		u.switchPlayer()
+		u.stepCounter += 1
+		return nil
+	}
+	return ErrInvalidPosition
 }
 
 func (u *Tictactoe) Next() int {

@@ -54,3 +54,68 @@ func TestTictactoe_CheckForWinner(t *testing.T) {
 
 	}
 }
+
+func TestTictactoe_play(t *testing.T) {
+	tests := []struct {
+		tictactoe    Game
+		movePosition int
+		wantErr      error
+	}{
+		{
+			tictactoe: &Tictactoe{
+				board:       [9]string{playerO, playerO, playerO, playerX, "", playerX, "", "", ""},
+				stepCounter: 5,
+				player:      playerX,
+			},
+			movePosition: 5,
+			wantErr:      nil,
+		},
+		{
+			tictactoe: &Tictactoe{
+				board:       [9]string{playerX, playerX, playerX, playerO, "", playerO, "", "", ""},
+				stepCounter: 5,
+				player:      playerO,
+			},
+			movePosition: 2,
+			wantErr:      ErrInvalidPosition,
+		},
+	}
+
+	for i, test := range tests {
+		err := test.tictactoe.play(test.movePosition)
+		if err != test.wantErr {
+			t.Error("test", i+1, "failed, expect wantErr", test.wantErr, "got", err)
+		}
+	}
+}
+
+func TestTictactoe_switchPlayer(t *testing.T) {
+	tests := []struct {
+		tictactoe  Game
+		nextPlayer string
+	}{
+		{
+			tictactoe: &Tictactoe{
+				board:       [9]string{playerO, playerO, playerO, playerX, "", playerX, "", "", ""},
+				stepCounter: 5,
+				player:      playerX,
+			},
+			nextPlayer: playerO,
+		},
+		{
+			tictactoe: &Tictactoe{
+				board:       [9]string{playerX, playerX, playerX, playerO, "", playerO, "", "", ""},
+				stepCounter: 5,
+				player:      playerO,
+			},
+			nextPlayer: playerX,
+		},
+	}
+
+	for i, test := range tests {
+		nextPlayer := test.tictactoe.switchPlayer()
+		if nextPlayer != test.nextPlayer {
+			t.Error("test", i+1, "failed, expect wantErr", test.nextPlayer, "got", nextPlayer)
+		}
+	}
+}
