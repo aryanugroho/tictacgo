@@ -113,7 +113,7 @@ func TestTictactoe_switchPlayer(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		nextPlayer := test.tictactoe.switchPlayer()
+		nextPlayer := test.tictactoe.SwitchPlayer()
 		if nextPlayer != test.nextPlayer {
 			t.Error("test", i+1, "failed, expect wantErr", test.nextPlayer, "got", nextPlayer)
 		}
