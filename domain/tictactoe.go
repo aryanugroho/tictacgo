@@ -15,6 +15,8 @@ type Game interface {
 	CheckForWinner() (bool, string)
 	SwitchPlayer() string
 	Play(position int) error
+	GetBoard() []string
+	IsOver() bool
 }
 
 type TictactoeUseCase interface {
@@ -39,12 +41,10 @@ func NewTictactoe() Game {
 }
 
 func (u *Tictactoe) CheckForWinner() (bool, string) {
-	anyWinner := false
 	i := 0
-
 	for i < 9 {
-		anyWinner = u.board[i] == u.board[i+1] && u.board[i+1] == u.board[i+2] && u.board[i] != ""
-		if !anyWinner {
+		u.isOver = u.board[i] == u.board[i+1] && u.board[i+1] == u.board[i+2] && u.board[i] != ""
+		if !u.isOver {
 			i += 3
 		} else {
 			return true, u.board[i]
@@ -53,8 +53,8 @@ func (u *Tictactoe) CheckForWinner() (bool, string) {
 
 	i = 0
 	for i < 3 {
-		anyWinner = u.board[i] == u.board[i+3] && u.board[i+3] == u.board[i+6] && u.board[i] != ""
-		if !anyWinner {
+		u.isOver = u.board[i] == u.board[i+3] && u.board[i+3] == u.board[i+6] && u.board[i] != ""
+		if !u.isOver {
 			i += 1
 		} else {
 			return true, u.board[i]
@@ -91,4 +91,12 @@ func (u *Tictactoe) Play(position int) error {
 		return nil
 	}
 	return ErrInvalidPosition
+}
+
+func (u *Tictactoe) GetBoard() []string {
+	return u.board[:]
+}
+
+func (u *Tictactoe) IsOver() bool {
+	return u.isOver
 }
