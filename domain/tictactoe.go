@@ -110,7 +110,8 @@ func (u *Tictactoe) GetComputerPosition() int {
 	var emptyCell []int
 	for i, v := range u.board {
 		if v == "" {
-			emptyCell = append(emptyCell, i)
+			idxToPosition := i + 1
+			emptyCell = append(emptyCell, idxToPosition)
 		}
 	}
 

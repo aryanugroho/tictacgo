@@ -119,3 +119,28 @@ func TestTictactoe_switchPlayer(t *testing.T) {
 		}
 	}
 }
+
+func TestTictactoe_GetComputerPosition(t *testing.T) {
+	tests := []struct {
+		tictactoe Game
+		wantErr   error
+	}{
+		{
+			tictactoe: &Tictactoe{
+				board:       [9]string{playerO, playerO, playerO, playerX, "", playerX, "", "", ""},
+				stepCounter: 5,
+				player:      playerO,
+			},
+			wantErr: nil,
+		},
+	}
+
+	for i, test := range tests {
+		compPosition := test.tictactoe.GetComputerPosition()
+		t.Log("pos", compPosition)
+		err := test.tictactoe.Play(compPosition)
+		if err != test.wantErr {
+			t.Error("test", i+1, "failed, expect wantErr", test.wantErr, "got", err)
+		}
+	}
+}
