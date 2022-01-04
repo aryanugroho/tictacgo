@@ -82,7 +82,7 @@ func TestTictactoe_play(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		err := test.tictactoe.play(test.movePosition)
+		err := test.tictactoe.Play(test.movePosition)
 		if err != test.wantErr {
 			t.Error("test", i+1, "failed, expect wantErr", test.wantErr, "got", err)
 		}

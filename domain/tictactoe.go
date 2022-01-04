@@ -1,6 +1,8 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+)
 
 type Tictactoe struct {
 	board       [9]string
@@ -11,11 +13,8 @@ type Tictactoe struct {
 
 type Game interface {
 	CheckForWinner() (bool, string)
-	ClearScreen()
 	switchPlayer() string
-	play(position int) error
-	Next() int
-	DrawBoard()
+	Play(position int) error
 }
 
 const (
@@ -73,10 +72,6 @@ func (u *Tictactoe) CheckForWinner() (bool, string) {
 	return false, ""
 }
 
-func (u *Tictactoe) ClearScreen() {
-
-}
-
 func (u *Tictactoe) switchPlayer() string {
 	if u.player == playerO {
 		u.player = playerX
@@ -85,20 +80,11 @@ func (u *Tictactoe) switchPlayer() string {
 	return playerO
 }
 
-func (u *Tictactoe) play(position int) error {
+func (u *Tictactoe) Play(position int) error {
 	if u.board[position-1] == "" {
 		u.board[position-1] = u.player
-		u.switchPlayer()
 		u.stepCounter += 1
 		return nil
 	}
 	return ErrInvalidPosition
-}
-
-func (u *Tictactoe) Next() int {
-	return 0
-}
-
-func (u *Tictactoe) DrawBoard() {
-
 }
