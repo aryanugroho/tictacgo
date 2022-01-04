@@ -1,6 +1,8 @@
 package tictactoe
 
 import (
+	"fmt"
+
 	"github.com/aryanugroho/tictacgo/domain"
 )
 
@@ -16,11 +18,20 @@ func NewTictactoeUseCase() domain.TictactoeUseCase {
 
 func (u *Tictactoe) Play(position int) (bool, string, error) {
 
+	// human play
 	err := u.tictactoe.Play(position)
 	if err != nil {
 		return false, "", err
 	}
+	u.tictactoe.SwitchPlayer()
 
+	// computer play
+	compPosition := u.tictactoe.GetComputerPosition()
+	fmt.Println("Computer position: ", compPosition)
+	err = u.tictactoe.Play(compPosition)
+	if err != nil {
+		return false, "", err
+	}
 	u.tictactoe.SwitchPlayer()
 
 	anyWinner, winner := u.tictactoe.CheckForWinner()
