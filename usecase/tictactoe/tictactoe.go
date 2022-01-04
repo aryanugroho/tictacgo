@@ -28,11 +28,13 @@ func (u *Tictactoe) Play(position int) (bool, string, error) {
 	// computer play
 	compPosition := u.tictactoe.GetComputerPosition()
 	fmt.Println("Computer position: ", compPosition)
-	err = u.tictactoe.Play(compPosition)
-	if err != nil {
-		return false, "", err
+	if compPosition > 0 {
+		err = u.tictactoe.Play(compPosition)
+		if err != nil {
+			return false, "", err
+		}
+		u.tictactoe.SwitchPlayer()
 	}
-	u.tictactoe.SwitchPlayer()
 
 	anyWinner, winner := u.tictactoe.CheckForWinner()
 
