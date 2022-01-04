@@ -2,6 +2,7 @@ package domain
 
 import (
 	"errors"
+	"math/rand"
 )
 
 type Tictactoe struct {
@@ -17,6 +18,7 @@ type Game interface {
 	Play(position int) error
 	GetBoard() []string
 	IsOver() bool
+	GetComputerPosition() int
 }
 
 type TictactoeUseCase interface {
@@ -102,4 +104,16 @@ func (u *Tictactoe) GetBoard() []string {
 
 func (u *Tictactoe) IsOver() bool {
 	return u.isOver
+}
+
+func (u *Tictactoe) GetComputerPosition() int {
+	var emptyCell []int
+	for i, v := range u.board {
+		if v == "" {
+			emptyCell = append(emptyCell, i)
+		}
+	}
+
+	cellChoice := rand.Intn(len(emptyCell))
+	return emptyCell[cellChoice]
 }
