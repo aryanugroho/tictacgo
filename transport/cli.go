@@ -49,10 +49,15 @@ func (u *CliTransport) next() bool {
 		}
 	}
 
-	if anyWinner {
+	if anyWinner && winner != "" {
 		fmt.Println(winner, "WIN!")
+		return true
+	} else if anyWinner && winner == "" {
+		fmt.Println("DRAW!")
+		return true
+	} else {
+		return false
 	}
-	return anyWinner
 }
 
 func (u *CliTransport) clearBoard() {

@@ -37,7 +37,7 @@ func TestTictactoe_CheckForWinner(t *testing.T) {
 				stepCounter: 9,
 				player:      playerX,
 			},
-			anyWinner: false,
+			anyWinner: true,
 			winner:    noplayer,
 			wantErr:   nil,
 		},

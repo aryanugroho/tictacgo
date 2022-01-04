@@ -2,7 +2,6 @@ package domain
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
 
 	"github.com/aryanugroho/tictacgo/common/arrayutil"
@@ -77,13 +76,18 @@ func (u *Tictactoe) CheckForWinner() (bool, string) {
 	}
 
 	if u.stepCounter == len(u.board) {
-		return false, ""
+		return true, ""
 	}
 
 	return false, ""
 }
 
 func (u *Tictactoe) SwitchPlayer() string {
+	u.stepCounter += 1
+	if u.stepCounter == len(u.board) {
+		u.isOver = true
+	}
+
 	if u.player == playerO {
 		u.player = playerX
 		return u.player
@@ -95,7 +99,6 @@ func (u *Tictactoe) SwitchPlayer() string {
 func (u *Tictactoe) Play(position int) error {
 	if u.board[position-1] == "" {
 		u.board[position-1] = u.player
-		u.stepCounter += 1
 		return nil
 	}
 	return ErrInvalidPosition
@@ -136,7 +139,6 @@ func (u *Tictactoe) GetComputerPosition() int {
 	}
 	anyPattern, pattern := isAnyPattern(humanCell)
 	if anyPattern {
-		fmt.Println("human", pattern)
 		any := arrayutil.IsAny(pattern, emptyCell)
 		if len(any) > 0 {
 			return any[0]
@@ -153,7 +155,6 @@ func (u *Tictactoe) GetComputerPosition() int {
 	}
 	anyPattern, pattern = isAnyPattern(compCell)
 	if anyPattern {
-		fmt.Println("comp", pattern)
 		any := arrayutil.IsAny(pattern, emptyCell)
 		if len(any) > 0 {
 			return any[0]
@@ -161,7 +162,6 @@ func (u *Tictactoe) GetComputerPosition() int {
 
 	}
 
-	fmt.Println("rand")
 	cellChoice := rand.Intn(len(emptyCell))
 	choice = emptyCell[cellChoice]
 	return choice

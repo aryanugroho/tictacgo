@@ -25,14 +25,17 @@ func (u *Tictactoe) Play(position int) (bool, string, error) {
 	}
 	u.tictactoe.SwitchPlayer()
 
-	// computer play
-	compPosition := u.tictactoe.GetComputerPosition()
-	fmt.Println("Computer position: ", compPosition)
-	if compPosition > 0 {
-		err = u.tictactoe.Play(compPosition)
-		if err != nil {
-			return false, "", err
+	if !u.tictactoe.IsOver() {
+		// computer play
+		compPosition := u.tictactoe.GetComputerPosition()
+		if compPosition > 0 {
+			fmt.Println("Computer position: ", compPosition)
+			err = u.tictactoe.Play(compPosition)
+			if err != nil {
+				return false, "", err
+			}
 		}
+
 		u.tictactoe.SwitchPlayer()
 	}
 
