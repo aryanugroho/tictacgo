@@ -17,6 +17,10 @@ type Game interface {
 	Play(position int) error
 }
 
+type TictactoeUseCase interface {
+	Play(position int) (bool, string, error)
+}
+
 const (
 	playerO    = "O"
 	playerX    = "X"
