@@ -21,6 +21,8 @@ type Game interface {
 
 type TictactoeUseCase interface {
 	Play(position int) (bool, string, error)
+	GetBoard() []string
+	IsOver() bool
 }
 
 const (
@@ -81,6 +83,7 @@ func (u *Tictactoe) SwitchPlayer() string {
 		u.player = playerX
 		return u.player
 	}
+	u.player = playerO
 	return playerO
 }
 
