@@ -2,7 +2,10 @@ package domain
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
+
+	"github.com/aryanugroho/tictacgo/common/arrayutil"
 )
 
 type Tictactoe struct {
@@ -28,9 +31,9 @@ type TictactoeUseCase interface {
 }
 
 const (
-	playerO    = "O"
-	playerX    = "X"
-	playerDraw = ""
+	playerO  = "O" // human
+	playerX  = "X" // computer
+	noplayer = ""  // empty
 )
 
 var (
@@ -107,14 +110,83 @@ func (u *Tictactoe) IsOver() bool {
 }
 
 func (u *Tictactoe) GetComputerPosition() int {
+	if u.stepCounter == len(u.board) {
+		return -1
+	}
+
+	var choice int
 	var emptyCell []int
+	var humanCell []int
+	var compCell []int
+
+	// collect empty cell
 	for i, v := range u.board {
-		if v == "" {
+		if v == noplayer {
 			idxToPosition := i + 1
 			emptyCell = append(emptyCell, idxToPosition)
 		}
 	}
 
+	// collect human cell
+	for i, v := range u.board {
+		if v == playerO {
+			idxToPosition := i + 1
+			humanCell = append(humanCell, idxToPosition)
+		}
+	}
+	anyPattern, pattern := isAnyPattern(humanCell)
+	if anyPattern {
+		fmt.Println("human", pattern)
+		any := arrayutil.IsAny(pattern, emptyCell)
+		if len(any) > 0 {
+			return any[0]
+		}
+
+	}
+
+	// collect comp cell
+	for i, v := range u.board {
+		if v == playerX {
+			idxToPosition := i + 1
+			compCell = append(compCell, idxToPosition)
+		}
+	}
+	anyPattern, pattern = isAnyPattern(compCell)
+	if anyPattern {
+		fmt.Println("comp", pattern)
+		any := arrayutil.IsAny(pattern, emptyCell)
+		if len(any) > 0 {
+			return any[0]
+		}
+
+	}
+
+	fmt.Println("rand")
 	cellChoice := rand.Intn(len(emptyCell))
-	return emptyCell[cellChoice]
+	choice = emptyCell[cellChoice]
+	return choice
+}
+
+func isAnyPattern(cell []int) (bool, []int) {
+
+	// possible wins pattern
+	var patterns [][]int
+	patterns = append(patterns, []int{1, 2, 3})
+	patterns = append(patterns, []int{4, 5, 6})
+	patterns = append(patterns, []int{7, 8, 9})
+
+	patterns = append(patterns, []int{1, 4, 6})
+	patterns = append(patterns, []int{2, 5, 8})
+	patterns = append(patterns, []int{3, 6, 9})
+
+	patterns = append(patterns, []int{1, 5, 9})
+	patterns = append(patterns, []int{3, 5, 7})
+
+	for _, p := range patterns {
+		contains := arrayutil.IsContains(p, cell, 2)
+		if contains {
+			return true, p
+		}
+	}
+	return false, []int{}
 }

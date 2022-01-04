@@ -33,12 +33,12 @@ func TestTictactoe_CheckForWinner(t *testing.T) {
 		},
 		{
 			tictactoe: &Tictactoe{
-				board:       [9]string{playerO, playerX, playerO, playerO, playerX, playerO, playerX, playerO, playerX},
+				board:       [9]string{playerX, playerO, playerO, playerO, playerX, playerX, playerX, playerO, playerO},
 				stepCounter: 9,
 				player:      playerX,
 			},
 			anyWinner: false,
-			winner:    playerDraw,
+			winner:    noplayer,
 			wantErr:   nil,
 		},
 	}
@@ -127,9 +127,22 @@ func TestTictactoe_GetComputerPosition(t *testing.T) {
 	}{
 		{
 			tictactoe: &Tictactoe{
-				board:       [9]string{playerO, playerO, playerO, playerX, "", playerX, "", "", ""},
-				stepCounter: 5,
-				player:      playerO,
+				board:  [9]string{playerX, "", playerO, "", "", playerO, "", "", ""},
+				player: playerX,
+			},
+			wantErr: nil,
+		},
+		{
+			tictactoe: &Tictactoe{
+				board:  [9]string{playerX, playerO, playerO, "", "", playerO, "", "", ""},
+				player: playerX,
+			},
+			wantErr: nil,
+		},
+		{
+			tictactoe: &Tictactoe{
+				board:  [9]string{playerX, playerO, playerO, playerO, playerX, playerO, "", "", ""},
+				player: playerX,
 			},
 			wantErr: nil,
 		},
@@ -137,7 +150,6 @@ func TestTictactoe_GetComputerPosition(t *testing.T) {
 
 	for i, test := range tests {
 		compPosition := test.tictactoe.GetComputerPosition()
-		t.Log("pos", compPosition)
 		err := test.tictactoe.Play(compPosition)
 		if err != test.wantErr {
 			t.Error("test", i+1, "failed, expect wantErr", test.wantErr, "got", err)
