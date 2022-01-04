@@ -21,7 +21,17 @@ func (u *Tictactoe) Play(position int) (bool, string, error) {
 		return false, "", err
 	}
 
+	u.tictactoe.SwitchPlayer()
+
 	anyWinner, winner := u.tictactoe.CheckForWinner()
 
 	return anyWinner, winner, nil
+}
+
+func (u *Tictactoe) GetBoard() []string {
+	return u.tictactoe.GetBoard()
+}
+
+func (u *Tictactoe) IsOver() bool {
+	return u.tictactoe.IsOver()
 }
